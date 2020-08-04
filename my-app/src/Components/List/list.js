@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import {API_URL} from '../../config';
-import './table.css';
 import { renderChangePercent } from '../../helpers';
+import Loading from '../Common/loading';
+import './table.css';
 
 class List extends Component {
     constructor() {
@@ -35,8 +36,8 @@ class List extends Component {
         const {currencies, loading, error} = this.state;
         if (loading){
             return(
-                <div>
-                    <h2>Loading...</h2>
+                <div className="loading-contanier">
+                    <Loading/>
                 </div>
             )
         }
