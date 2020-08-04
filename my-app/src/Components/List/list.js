@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {API_URL} from '../../config';
+import './table.css'
 
 class List extends Component {
     constructor() {
@@ -33,8 +34,6 @@ class List extends Component {
 
     render() {
         const {currencies, loading, error} = this.state;
-        console.log("List -> render -> this.state", this.state)
-        
         if (loading){
             return(
                 <div>
@@ -43,8 +42,31 @@ class List extends Component {
             )
         }
         return(
-            <div>
-                <h2>List</h2>
+            <div className="Table-container">
+              <table className="Table">
+                  <thead className="Table-head">
+                    <tr>
+                        <th>Cryptocurrency</th>
+                        <th>Prise</th>
+                        <th>Market Cap</th>
+                        <th>24H Change</th>
+                    </tr>
+                  </thead>
+                  <tbody className="Table-body">
+                    {
+                        currencies.map((row) => {
+                            return(
+                                <tr>
+                                    <td>{row.id}</td>
+                                    <td>{row.price}</td>
+                                    <td>{row.marketCap}</td>
+                                    <td>{row.percentChange24h}</td>
+                                </tr>
+                            )
+                        })
+                    }
+                  </tbody>
+              </table>
             </div>
         )
     };
