@@ -30,6 +30,12 @@ class List extends Component {
                 currencies
             })
         })
+        .catch(error =>{
+            this.setState({
+                loading:false,
+                error
+            })
+        })
     }
 
     render() {
@@ -39,6 +45,11 @@ class List extends Component {
                 <div className="loading-contanier">
                     <Loading/>
                 </div>
+            )
+        }
+        else if(error){
+            return(
+                <p>ERROR{error.message}</p>
             )
         }
         return(
