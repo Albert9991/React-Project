@@ -3,6 +3,7 @@ import {API_URL} from '../../config';
 import './table.css'
 import Table from './table'
 import Loading from '../Common/Loading/loading'
+import Pagination from './pagination'
 
 class List extends Component{
     constructor() {
@@ -10,15 +11,21 @@ class List extends Component{
         this.state = {
             currencies: [],
             loading: false,
+            page:1,
+            totalPages:0,
+            perPage:20,
             error:''
         }
+        this.handlePaginationClick = this.handlePaginationClick.bind(this)
     }
 
-    componentDidMount () {
+    fetchCurrencies() {
         this.setState({
             loading: true
          })
-        fetch(`${API_URL}/cryptocurrencies/?page=1&perPage=10`)
+         const{page, perPage}= this.state
+
+        fetch(`${API_URL}/cryptocurrencies/?page=${page}&perPage=${perPage}`)
         .then(resp =>{
             return resp.json().then((data) => {
                 if(resp.ok) {
@@ -28,10 +35,11 @@ class List extends Component{
             })
         })
         .then(data => {
-            const{currencies} = data;
+            const{currencies,totalPages} = data;
             this.setState({
                loading: false,
-               currencies
+               currencies,
+               totalPages
             })
         })
 
@@ -41,10 +49,25 @@ class List extends Component{
                 error:error.errorMessage
             })
         })
+
+    }
+
+    componentDidMount () {
+       this.fetchCurrencies()
+    }
+
+    handlePaginationClick(direction) {
+        let nextPage =this.state.page;
+        nextPage = direction ==='next' ? nextPage +1 : nextPage-1;
+        this.setState({
+            page:nextPage
+        })
+        this.fetchCurrencies()
     }
 
     render() {
-        const { currencies, loading, error } = this.state;
+        console.log(this.state)
+        const { currencies, loading, error,page,totalPages } = this.state;
         if(loading){
             return(
                 <div className="loading-container">
@@ -58,7 +81,16 @@ class List extends Component{
         }
 
         return(
-            <div><Table data={currencies}/></div>
+            <div>
+                <Table 
+                    data={currencies}
+                />
+                <Pagination
+                page={page}
+                totalPages={totalPages}
+                handlePaginationClick = {this.handlePaginationClick}
+                />
+            </div>
         )
         
     }
