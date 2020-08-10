@@ -1,6 +1,6 @@
 import React from 'react';
-import logo from './logo.png'
-import './header.css'
+import './header.css';
+import logo from './logo.png';
 
 const Header = () => {
     return(
@@ -9,9 +9,9 @@ const Header = () => {
                 src={logo}
                 alt="logo"
                 className="Header-logo"
-            />
+             />
         </div>
     )
-}
+};
 
 export default Header;
