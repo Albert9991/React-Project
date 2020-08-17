@@ -1,100 +1,98 @@
-import React, {Component} from 'react';
-import {API_URL} from '../../config';
-import './table.css'
-import Table from './table'
-import Loading from '../Common/Loading/loading'
-import Pagination from './pagination'
+import React, { Component } from 'react';
+import { API_URL } from '../../config';
+import Loading from '../Common/Loading/loading';
+import Table from './table';
+import Pagination from './pagination';
+import './table.css';
 
-class List extends Component{
+class List extends Component {
     constructor() {
-        super()
+        super();
         this.state = {
             currencies: [],
             loading: false,
-            page:1,
-            totalPages:0,
-            perPage:20,
-            error:''
-        }
-        this.handlePaginationClick = this.handlePaginationClick.bind(this)
-    }
+            page: 1,
+            totalPages: 0,
+            perPage: 20,
+            error: ''
+        };
+        this.handlePaginationClick = this.handlePaginationClick.bind(this);
+    };
 
-    fetchCurrencies() {
+    fetchCurencis() {
         this.setState({
             loading: true
-         })
-         const{page, perPage}= this.state
+        })
+        const { page, perPage } = this.state
 
         fetch(`${API_URL}/cryptocurrencies/?page=${page}&perPage=${perPage}`)
-        .then(resp =>{
-            return resp.json().then((data) => {
-                if(resp.ok) {
-                    return data
-                }
-                return Promise.reject(data)
+            .then(resp => {
+                return resp.json().then((data) => {
+                    if (resp.ok) {
+                        return data
+                    }
+                    return Promise.reject(data)
+                })
             })
-        })
-        .then(data => {
-            const{currencies,totalPages} = data;
-            this.setState({
-               loading: false,
-               currencies,
-               totalPages
+            .then(data => {
+                const { currencies, totalPages } = data;
+                this.setState({
+                    loading: false,
+                    currencies,
+                    totalPages
+                })
+            }
+            )
+            .catch((error) => {
+                this.setState({
+                    loading: false,
+                    error: error.errorMessage
+                })
             })
-        })
-
-        .catch((error) => {
-            this.setState({
-                loading:false,
-                error:error.errorMessage
-            })
-        })
-
     }
 
-    componentDidMount () {
-       this.fetchCurrencies()
+    componentDidMount() {
+        this.fetchCurencis();
     }
 
     handlePaginationClick(direction) {
-        let nextPage =this.state.page;
-        nextPage = direction ==='next' ? nextPage +1 : nextPage-1;
+        let nextPage = this.state.page;
+        nextPage = direction === 'next' ? nextPage + 1 : nextPage - 1;
         this.setState({
-            page:nextPage
-        })
-        this.fetchCurrencies()
+            page: nextPage
+        }, this.fetchCurencis)
     }
-
     render() {
-        console.log(this.state)
-        const { currencies, loading, error,page,totalPages } = this.state;
-        if(loading){
-            return(
-                <div className="loading-container">
-                    <h2><Loading/></h2>
+        const { currencies, loading, error, page, totalPages } = this.state;
+        if (error) {
+            return (
+                <div className="error">{error}</div>
+            )
+        }
+        if (loading) {
+            return (
+                <div className="loading-contanier">
+                    <Loading />
                 </div>
             )
         }
+        // console.log(this.props , 'This.props');
+        // console.log(this.props.history.push , 'This.props');
 
-        if(error){
-            return <div className ="error">{error}</div>
-        }
-
-        return(
-            <div>
-                <Table 
+        return (
+            <div >
+                <Table
                     data={currencies}
+                    historyPush={this.props.history.push}
                 />
                 <Pagination
-                page={page}
-                totalPages={totalPages}
-                handlePaginationClick = {this.handlePaginationClick}
+                    page={page}
+                    totalPages={totalPages}
+                    handlePaginationClick={this.handlePaginationClick}
                 />
             </div>
         )
-        
-    }
-}
+    };
+};
 
-export default List
-
+export default List;
