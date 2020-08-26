@@ -4,7 +4,7 @@ import Loading from '../Common/Loading/loading';
 import Table from './table';
 import Pagination from './pagination';
 import './table.css';
-
+import { hendleResponse } from '../../helpers';
 class List extends Component {
     constructor() {
         super();
@@ -26,14 +26,7 @@ class List extends Component {
         const { page, perPage } = this.state
 
         fetch(`${API_URL}/cryptocurrencies/?page=${page}&perPage=${perPage}`)
-            .then(resp => {
-                return resp.json().then((data) => {
-                    if (resp.ok) {
-                        return data
-                    }
-                    return Promise.reject(data)
-                })
-            })
+            .then(resp => hendleResponse(resp))
             .then(data => {
                 const { currencies, totalPages } = data;
                 this.setState({
@@ -76,14 +69,11 @@ class List extends Component {
                 </div>
             )
         }
-        // console.log(this.props , 'This.props');
-        // console.log(this.props.history.push , 'This.props');
 
         return (
             <div >
                 <Table
                     data={currencies}
-                    historyPush={this.props.history.push}
                 />
                 <Pagination
                     page={page}

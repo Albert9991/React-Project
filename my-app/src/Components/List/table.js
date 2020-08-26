@@ -1,8 +1,9 @@
 import React from 'react';
 import { renderChangePercent } from '../../helpers';
+import { withRouter } from 'react-router-dom';
 import './table.css';
 
-const Table = ({ data, historyPush }) => {
+const Table = ({ data, history }) => {
     return (
         <div className="Table-container">
             <table className="Table">
@@ -25,7 +26,7 @@ const Table = ({ data, historyPush }) => {
                             percentChange24h
                         }) => {
                             return (
-                                <tr key={id} onClick={() => historyPush(`/currency/${id}`)}>
+                                <tr key={id} onClick={() => {history.push(`/currency/${id}`)}}>
                                     <td>
                                         <span className="Table-rank">{rank}</span>
                                         {name}
@@ -50,4 +51,4 @@ const Table = ({ data, historyPush }) => {
         </div>
     )
 }
-export default Table;
+export default withRouter(Table);
