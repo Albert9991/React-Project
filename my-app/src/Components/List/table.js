@@ -26,7 +26,7 @@ const Table = ({ data, history }) => {
                             percentChange24h
                         }) => {
                             return (
-                                <tr key={id} onClick={() => {history.push(`/currency/${id}`)}}>
+                                <tr key={id} onClick={() => { history.push(`/currency/${id}`) }}>
                                     <td>
                                         <span className="Table-rank">{rank}</span>
                                         {name}

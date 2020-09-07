@@ -3,8 +3,7 @@ import { Link } from 'react-router-dom';
 import './header.css';
 import logo from './logo.png';
 import Search from '../Search/search.js';
-
-const Header = () => {
+const Header = (props) => {
     return (
         <div className="Header">
             <Link to='/'>
